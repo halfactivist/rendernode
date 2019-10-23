@@ -67,23 +67,9 @@
 #define ATTRLOC_COLOR 1
 #define ATTRLOC_TEXCOORD 2
 
-/*
-#define TEX_WIDTH 1024
-#define TEX_HEIGHT 1024
-#define TEX_BUFFER_SIZE (TEX_WIDTH * TEX_HEIGHT * 4)
-*/
-
-static GLfloat _initial_colors[12] = {
-    1.0f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 1.0f,
-    1.0f, 0.0f, 1.0f
-};
-
 OpenGLRenderNode::OpenGLRenderNode(CustomRenderItem *item)
     : m_item(item)
 {
-    memcpy( this->colors, _initial_colors, sizeof (_initial_colors) );
 }
 
 OpenGLRenderNode::~OpenGLRenderNode()
@@ -104,14 +90,6 @@ void OpenGLRenderNode::releaseResources()
 
 void OpenGLRenderNode::init()
 {
-    QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
-    QOpenGLExtraFunctions *ef = QOpenGLContext::currentContext()->extraFunctions();
-
-    /*
-    this->mapbufferFunctions = new QOpenGLExtension_OES_mapbuffer();
-    this->mapbufferFunctions->initializeOpenGLFunctions();
-    */
-
     QSet<QByteArray> extensions = QOpenGLContext::currentContext()->extensions();
 
     for( QSet<QByteArray>::iterator i = extensions.begin(); i != extensions.end(); i++ ){
@@ -152,24 +130,14 @@ void OpenGLRenderNode::init()
 
     m_matrixUniform = m_program->uniformLocation("matrix");
     m_opacityUniform = m_program->uniformLocation("opacity");
-
-    const int VERTEX_SIZE = 6 * sizeof(GLfloat);
-
-
-
-
-
 }
 
 void OpenGLRenderNode::render(const RenderState *state)
 {
-    //qDebug() << __FUNCTION__ << "@" << QDateTime::currentMSecsSinceEpoch();
-
     if (!m_program)
         init();
 
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
-    QOpenGLExtraFunctions *ef = QOpenGLContext::currentContext()->extraFunctions();
 
     m_program->bind();
     m_program->setUniformValue(m_matrixUniform, *state->projectionMatrix() * *matrix());
@@ -265,11 +233,6 @@ QSGRenderNode::RenderingFlags OpenGLRenderNode::flags() const
 QRectF OpenGLRenderNode::rect() const
 {
     return QRect(0, 0, m_item->width(), m_item->height());
-}
-
-void OpenGLRenderNode::setColors(float *v)
-{
-    memcpy( this->colors, v, sizeof (this->colors) );
 }
 
 #endif // opengl

@@ -64,10 +64,6 @@ CustomRenderItem::CustomRenderItem(QQuickItem *parent)
 {
     // Our item shows something so set the flag.
     setFlag(ItemHasContents);
-    colors[0] = {255,0,0};
-    colors[1] = {0,255,0};
-    colors[2] = {0,0,255};
-    colors[3] = {255,0,255};
 
     this->initPixelBuffer( 640, 480 );
 }
@@ -117,19 +113,6 @@ void CustomRenderItem::animationTick()
     static int calls = 0;
     calls++;
 
-    for( int i = 0; i < 4; i++ ){
-        this->colors[i].R += 5;
-    }
-
-    uint8_t *c = (uint8_t *)this->colors;
-    float colors[12];
-
-    for( int i = 0; i < 12; i++ ){
-        colors[i] = ((float)c[i]) / 255.0f;
-    }
-
-    this->node->setColors( colors );
-
     if( (calls % 100) == 0 ){
         this->initPixelBuffer( this->pixelBufferWidth + 10, this->pixelBufferHeight + 10 );
     }
@@ -166,6 +149,7 @@ void CustomRenderItem::initPixelBuffer( int width, int height )
             texBufAsUInt32++;
         }
     }
+
 }
 
 uint8_t *CustomRenderItem::getPixelBuffer( int &width, int &height )

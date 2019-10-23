@@ -54,11 +54,6 @@
 #include <QQuickItem>
 #include "openglrenderer.h"
 
-struct RGB {
-    uint8_t R;
-    uint8_t G;
-    uint8_t B;
-};
 
 class CustomRenderItem : public QQuickItem
 {
@@ -69,8 +64,6 @@ public:
     QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *) override;
 
     Q_INVOKABLE void startAnimation();
-
-    RGB colors[4];
 
     void initPixelBuffer( int width, int height );
     uint8_t *getPixelBuffer( int &width, int &height );
@@ -84,6 +77,13 @@ private:
     uint8_t *pixelBuffer = nullptr;
     int pixelBufferWidth = 0;
     int pixelBufferHeight = 0;
+
+    GLuint textureID = 0;
+    int textureWidth = 0;
+    int textureHeight = 0;
+
+private slots:
+    void onWindowChanged( QQuickWindow *window );
 
 };
 

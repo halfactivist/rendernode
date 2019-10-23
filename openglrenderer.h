@@ -79,8 +79,6 @@ public:
     RenderingFlags flags() const override;
     QRectF rect() const override;
 
-    void setColors( float *v );
-
 private:
     void init();
 
@@ -90,9 +88,7 @@ private:
     int m_opacityUniform;
     QOpenGLBuffer *m_vbo = nullptr;
 
-    GLfloat colors[12];
     GLuint textureID = 0;
-    //GLubyte *textureBuffer = nullptr;
     int textureWidth = 0;
     int textureHeight = 0;
 
